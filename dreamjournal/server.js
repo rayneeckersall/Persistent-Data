@@ -68,6 +68,22 @@ app.get("/api/dreams/:id", async (req, res) => {
   }
 });
 
+// DELETE a dream by ID
+app.delete("/api/dreams/:id", async (req, res) => {
+  try {
+    const deleted = await Dream.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: "Dream not found" });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting dream:", err);
+    res.status(500).json({ success: false, message: "Failed to delete dream" });
+  }
+});
+
 
 // create new dream
 app.post("/api/dreams", async (req, res) => {

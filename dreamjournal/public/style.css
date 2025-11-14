@@ -377,3 +377,22 @@ body, html {
   white-space: pre-wrap;
 }
 
+.danger-btn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  background: #ff5c7a;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 6px 16px rgba(255, 92, 122, 0.5);
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.danger-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 10px rgba(255, 92, 122, 0.5);
+}
+

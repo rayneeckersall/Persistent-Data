@@ -85,6 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (detailCard) {
     loadDreamDetail();
   }
+
+    const deleteBtn = document.getElementById("deleteDreamBtn");
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", deleteCurrentDream);
+  }
+
 });
 
 // fetch and render dreams on homepage
@@ -180,4 +186,31 @@ async function loadDreamDetail() {
     console.error("Error loading dream detail", err);
   }
 }
+
+async function deleteCurrentDream() {
+  const id = getDreamIdFromUrl();
+  if (!id) return;
+
+  const confirmDelete = confirm("Are you sure you want to delete this dream?");
+  if (!confirmDelete) return;
+
+  try {
+    const res = await fetch(`/api/dreams/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!res.ok) {
+      console.error("Failed to delete dream", res.status);
+      alert("Error deleting dream.");
+      return;
+    }
+
+    // back to home after delete
+    window.location.href = "index.html";
+  } catch (err) {
+    console.error("Error deleting dream", err);
+    alert("Error deleting dream.");
+  }
+}
+
 
