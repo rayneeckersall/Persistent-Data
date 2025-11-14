@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Journal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="app app-home">
 
+  <!-- Daytime hero -->
+  <header class="hero">
+    <div class="hero-sky">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+    </div>
+    <div class="hero-text">
+      <p class="hero-greeting">Hi Rayne,</p>
+      <h1 class="hero-title">What did you dream about?</h1>
+    </div>
+  </header>
+
+  <!-- Nighttime / entries area -->
+  <main class="content">
+    <section class="entries-section">
+      <h2 class="section-title">Latest Entries</h2>
+      <div id="latestEntries" class="entries-grid">
+        <!-- JS will inject cards here -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating add button -->
+  <button class="fab" onclick="window.location.href='new.html'">
+    +
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>
