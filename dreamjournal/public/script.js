@@ -4,10 +4,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const latestContainer = document.getElementById("latestEntries");
   const tagButtons = document.querySelectorAll(".tag-pill");
   const addCustomTagBtn = document.getElementById("addCustomTag");
+  const addBtn = document.getElementById("addDreamBtn");
+  const detailCard = document.getElementById("dreamDetail");
+  const deleteBtn = document.getElementById("deleteDreamBtn");
 
-  // ----- ADD DREAM PAGE LOGIC -----
+  // ----- HOME PAGE: + button -----
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      // go to the Add Dream page (change name if your file is different)
+      window.location.href = "new.html";
+    });
+  }
+
+  // ----- ADD DREAM PAGE: tag toggles -----
   if (tagButtons.length > 0) {
-    // toggle selected state
     tagButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         btn.classList.toggle("selected");
@@ -15,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // custom tag (+)
   if (addCustomTagBtn) {
     addCustomTagBtn.addEventListener("click", () => {
       const input = document.getElementById("customTag");
@@ -34,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ----- ADD DREAM PAGE: submit -----
   if (submitBtn) {
     submitBtn.addEventListener("click", async () => {
       const title = document.getElementById("title").value.trim();
@@ -49,12 +61,12 @@ document.addEventListener("DOMContentLoaded", () => {
         tag => tag.innerText
       );
 
-      const recurring =
-        document.querySelector("input[name='recurring']:checked").value ===
-        "true";
-      const nightmare =
-        document.querySelector("input[name='nightmare']:checked").value ===
-        "true";
+      // safer radio handling (defaults to false if nothing selected)
+      const recurringInput = document.querySelector("input[name='recurring']:checked");
+      const nightmareInput = document.querySelector("input[name='nightmare']:checked");
+
+      const recurring = recurringInput ? recurringInput.value === "true" : false;
+      const nightmare = nightmareInput ? nightmareInput.value === "true" : false;
 
       const dream = { title, story, tags, emotionLevel, recurring, nightmare };
 
@@ -66,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (res.ok) {
+          // back home after saving
           window.location.href = "index.html";
         } else {
           alert("Error saving dream.");
@@ -77,30 +90,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ----- HOME PAGE LOGIC -----
+  // ----- HOME PAGE: load list -----
   if (latestContainer) {
     loadDreams();
   }
-   const detailCard = document.getElementById("dreamDetail");
+
+  // ----- DETAIL PAGE: load + delete -----
   if (detailCard) {
     loadDreamDetail();
   }
 
-    const deleteBtn = document.getElementById("deleteDreamBtn");
   if (deleteBtn) {
     deleteBtn.addEventListener("click", deleteCurrentDream);
   }
-
 });
 
-// fetch and render dreams on homepage
-// fetch and render dreams on homepage
+// ---------- HOME: fetch and render dreams ----------
 async function loadDreams() {
   try {
     const res = await fetch("/api/dreams");
     const dreams = await res.json();
 
     const container = document.getElementById("latestEntries");
+    if (!container) return;
+
     container.innerHTML = "";
 
     dreams.forEach(dream => {
@@ -111,7 +124,7 @@ async function loadDreams() {
         <p>${new Date(dream.createdAt).toLocaleDateString()}</p>
       `;
 
-      // make card clickable – go to detail page
+      // click card → detail page
       card.addEventListener("click", () => {
         window.location.href = `dream.html?id=${dream._id}`;
       });
@@ -122,8 +135,8 @@ async function loadDreams() {
     console.error("Error loading dreams", err);
   }
 }
-// ---------- DETAIL PAGE HELPERS ----------
 
+// ---------- DETAIL PAGE HELPERS ----------
 function getDreamIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id");
@@ -163,7 +176,7 @@ async function loadDreamDetail() {
       tagsEl.appendChild(pill);
     });
 
-    // emotion text
+    // emotion
     const level = dream.emotionLevel || 0;
     const label =
       level <= 1 ? "Very relaxed" :
@@ -174,7 +187,7 @@ async function loadDreamDetail() {
 
     emotionEl.textContent = `${label} (${level}/5)`;
 
-    // type (recurring / nightmare)
+    // flags (recurring / nightmare)
     const bits = [];
     bits.push(dream.recurring ? "Recurring dream" : "One-time dream");
     bits.push(dream.nightmare ? "Nightmare" : "Not a nightmare");
@@ -205,7 +218,6 @@ async function deleteCurrentDream() {
       return;
     }
 
-    // back to home after delete
     window.location.href = "index.html";
   } catch (err) {
     console.error("Error deleting dream", err);
@@ -213,4 +225,12 @@ async function deleteCurrentDream() {
   }
 }
 
-
+// ---------- DAY → NIGHT SCROLL ANIMATION ----------
+window.addEventListener("scroll", () => {
+  const max = document.body.scrollHeight - window.innerHeight;
+  const progress = max > 0 ? window.scrollY / max : 0;
+  document.documentElement.style.setProperty(
+    "--scroll-progress",
+    progress.toString()
+  );
+});

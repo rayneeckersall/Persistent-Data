@@ -4,37 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dream Journal</title>
+
+  <!-- New fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body class="app app-home">
+  <div class="sky-layer">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="cloud cloud-4"></div>
+  </div>
 
-  <!-- Daytime hero -->
-  <header class="hero">
-    <div class="hero-sky">
-      <div class="cloud cloud-1"></div>
-      <div class="cloud cloud-2"></div>
-      <div class="cloud cloud-3"></div>
-    </div>
-    <div class="hero-text">
-      <p class="hero-greeting">Hi Rayne,</p>
-      <h1 class="hero-title">What did you dream about?</h1>
-    </div>
-  </header>
+  <div class="star-layer"></div>
 
-  <!-- Nighttime / entries area -->
-  <main class="content">
+  <main class="home-layout">
+    <header class="hero">
+      <div class="hero-text">
+        <p class="hero-eyebrow">Hi Rayne,</p>
+        <h1 class="hero-title">What did you <span>dream</span> about?</h1>
+      </div>
+    </header>
+
     <section class="entries-section">
       <h2 class="section-title">Latest Entries</h2>
-      <div id="latestEntries" class="entries-grid">
-        <!-- JS will inject cards here -->
-      </div>
+      <div id="latestEntries" class="entries-list"></div>
     </section>
   </main>
 
-  <!-- Floating add button -->
-  <button class="fab" onclick="window.location.href='new.html'">
-    +
-  </button>
+ <button id="addDreamBtn" class="fab" type="button">+</button>
+
 
   <script src="script.js"></script>
 </body>
