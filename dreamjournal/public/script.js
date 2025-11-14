@@ -8,11 +8,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const detailCard = document.getElementById("dreamDetail");
   const deleteBtn = document.getElementById("deleteDreamBtn");
 
+  // NEW: toggle elements for recurring & nightmare
+  const recurringToggle = document.getElementById("recurringToggle");
+  const recurringLabel = document.getElementById("recurringLabel");
+  const nightmareToggle = document.getElementById("nightmareToggle");
+  const nightmareLabel = document.getElementById("nightmareLabel");
+
   // ----- HOME PAGE: + button -----
   if (addBtn) {
     addBtn.addEventListener("click", () => {
-      // go to the Add Dream page (change name if your file is different)
+      // go to the Add Dream page
       window.location.href = "new.html";
+    });
+  }
+
+  // ----- TOGGLES: update label text (True / False) -----
+  if (recurringToggle && recurringLabel) {
+    // set initial text
+    recurringLabel.textContent = recurringToggle.checked ? "True" : "False";
+
+    recurringToggle.addEventListener("change", () => {
+      recurringLabel.textContent = recurringToggle.checked ? "True" : "False";
+    });
+  }
+
+  if (nightmareToggle && nightmareLabel) {
+    // set initial text
+    nightmareLabel.textContent = nightmareToggle.checked ? "True" : "False";
+
+    nightmareToggle.addEventListener("change", () => {
+      nightmareLabel.textContent = nightmareToggle.checked ? "True" : "False";
     });
   }
 
@@ -61,12 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
         tag => tag.innerText
       );
 
-      // safer radio handling (defaults to false if nothing selected)
-      const recurringInput = document.querySelector("input[name='recurring']:checked");
-      const nightmareInput = document.querySelector("input[name='nightmare']:checked");
+const recurringInput = document.querySelector("input[name='recurring']:checked");
+const nightmareInput = document.querySelector("input[name='nightmare']:checked");
 
-      const recurring = recurringInput ? recurringInput.value === "true" : false;
-      const nightmare = nightmareInput ? nightmareInput.value === "true" : false;
+const recurring = recurringInput ? recurringInput.value === "true" : false;
+const nightmare = nightmareInput ? nightmareInput.value === "true" : false;
 
       const dream = { title, story, tags, emotionLevel, recurring, nightmare };
 

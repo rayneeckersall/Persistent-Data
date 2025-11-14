@@ -5,31 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Dream</title>
 
-  <!-- New fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  
+  <!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+
+
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="app app-new">
 
+  <!-- Top bar -->
   <header class="sub-hero">
     <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
-    <h1 class="sub-title">Tell Us About Your Dream...</h1>
+    <h1 class="sub-title">Describe Your Dream...</h1>
   </header>
 
   <main class="form-wrapper">
     <div class="form-card">
-      <label class="field-label" for="title">Title:</label>
-      <input id="title" class="field-input" type="text" placeholder="Give Your Dream a Name..." />
 
-      <label class="field-label" for="story">Story:</label>
-      <textarea id="story" class="field-textarea" rows="5"
-        placeholder="Write about your dream here..."></textarea>
+      <!-- Title -->
+      <div class="field-group">
+        <label class="field-label" for="title">Title:</label>
+        <input
+          id="title"
+          class="field-input"
+          type="text"
+          placeholder="Give Your Dream a Name..."
+        />
+      </div>
 
+      <!-- Story -->
+      <div class="field-group">
+        <label class="field-label" for="story">Story:</label>
+        <textarea
+          id="story"
+          class="field-textarea"
+          rows="5"
+          placeholder="Write about your dream here..."
+        ></textarea>
+      </div>
+
+      <!-- Tags -->
       <div class="field-group">
         <p class="field-label">Tags:</p>
+
         <div class="tags-row">
           <button type="button" class="tag-pill">Flying</button>
           <button type="button" class="tag-pill">Water</button>
@@ -39,13 +63,19 @@
           <button type="button" class="tag-pill">Animals</button>
           <button type="button" class="tag-pill">Creepy</button>
         </div>
+
         <div class="custom-tag-row">
-          <input id="customTag" class="field-input small-input" type="text"
-            placeholder="Add your own tag" />
+          <input
+            id="customTag"
+            class="field-input small-input"
+            type="text"
+            placeholder="Add your own tag"
+          />
           <button type="button" id="addCustomTag" class="plus-tag">+</button>
         </div>
       </div>
 
+      <!-- Emotion slider -->
       <div class="field-group">
         <p class="field-label">Emotion Level:</p>
         <div class="slider-row">
@@ -55,32 +85,44 @@
         </div>
       </div>
 
-      <div class="toggle-row">
-        <div class="toggle-group">
-          <p class="field-label">Recurring?</p>
-          <label class="pill-toggle">
-            <input type="radio" name="recurring" value="true" checked />
-            <span>True</span>
-          </label>
-          <label class="pill-toggle">
-            <input type="radio" name="recurring" value="false" />
-            <span>False</span>
-          </label>
-        </div>
+      <!-- Recurring / Nightmare pill toggles -->
+      <div class="field-group">
+        <div class="toggle-row">
 
-        <div class="toggle-group">
-          <p class="field-label">Nightmare?</p>
-          <label class="pill-toggle">
-            <input type="radio" name="nightmare" value="true" />
-            <span>True</span>
-          </label>
-          <label class="pill-toggle">
-            <input type="radio" name="nightmare" value="false" checked />
-            <span>False</span>
-          </label>
+          <!-- Recurring -->
+          <div class="toggle-group">
+            <p class="field-label">Recurring?</p>
+
+            <label class="pill-toggle">
+              <input type="radio" name="recurring" value="true" checked />
+              <span>True</span>
+            </label>
+
+            <label class="pill-toggle">
+              <input type="radio" name="recurring" value="false" />
+              <span>False</span>
+            </label>
+          </div>
+
+          <!-- Nightmare -->
+          <div class="toggle-group">
+            <p class="field-label">Nightmare?</p>
+
+            <label class="pill-toggle">
+              <input type="radio" name="nightmare" value="true" />
+              <span>True</span>
+            </label>
+
+            <label class="pill-toggle">
+              <input type="radio" name="nightmare" value="false" checked />
+              <span>False</span>
+            </label>
+          </div>
+
         </div>
       </div>
 
+      <!-- Submit -->
       <button id="submitBtn" class="primary-btn">Submit</button>
     </div>
   </main>

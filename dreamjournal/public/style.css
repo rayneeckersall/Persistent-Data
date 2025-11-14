@@ -5,7 +5,7 @@
 :root {
   --bg-day-top: #dff3ff;
   --bg-day-mid: #f3e5ff;
-  --bg-night-mid: #a884ff;
+  --bg-night-mid: #9e7cec;
   --bg-night-bottom: #3d2f87;
 
   --ink-primary: #241845;
@@ -29,15 +29,23 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-y: auto;
   overflow-x: hidden;  
 }
 
 body {
-  font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont,
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
     "SF Pro", "Helvetica Neue", sans-serif;
   background: #0b0326;
   color: var(--ink-primary);
+}
+
+body.app-home {
+  overflow-y: auto;
+}
+
+body.app-new {
+  overflow: hidden;
+  height: 100vh;  /* make it exactly viewport height */
 }
 
 /* Root wrapper used everywhere */
@@ -131,6 +139,20 @@ body {
 .s8 { top: 10px; left: 55%; animation-delay: 1.6s; transform: scale(0.75); }
 .s9 { top: 62px; left: 85%; animation-delay: .3s; transform: scale(0.6); }
 
+/* NEW STARS — add these under s1–s9 */
+.s10 { top: 12px; left: 70%; animation-delay: 1.3s; transform: scale(0.9); }
+.s11 { top: 40px; left: 5%;  animation-delay: .5s;  transform: scale(0.7); }
+.s12 { top: 58px; left: 48%; animation-delay: 1.7s; transform: scale(0.85); }
+.s13 { top: 22px; left: 82%; animation-delay: .2s;  transform: scale(0.65); }
+.s14 { top: 72px; left: 30%; animation-delay: 1.1s; transform: scale(0.8); }
+
+.s15 { top: 8px;  left: 18%; animation-delay: .9s;  transform: scale(0.5); }
+.s16 { top: 52px; left: 57%; animation-delay: 1.4s; transform: scale(0.75); }
+.s17 { top: 34px; left: 90%; animation-delay: .7s;  transform: scale(0.6); }
+.s18 { top: 68px; left: 12%; animation-delay: 1.8s; transform: scale(0.9); }
+.s19 { top: 16px; left: 38%; animation-delay: .3s;  transform: scale(0.55); }
+
+
 /* gentle shimmer animation */
 @keyframes twinkle {
   0% {
@@ -168,7 +190,7 @@ body {
 .cloud {
   position: absolute;
   background: rgba(255, 255, 255, 0.8); /* lighter opacity */
-  box-shadow: 0 20px 45px rgba(143, 163, 255, 0.45);
+  box-shadow: 0 20px 45px rgba(180, 193, 255, 0.45);
   border-radius: 999px;
 }
 
@@ -262,7 +284,7 @@ body {
 /* hero text stays on the left */
 .hero-text {
   margin-top: 70px;
-  max-width: 380px;
+  max-width: 100%;
   text-align: left;
 }
 
@@ -276,14 +298,14 @@ body {
 .hero-eyebrow{
 padding-top: 30px;
 margin-bottom: 4px;
+font-size: 20px;
 }
 .hero-title {
   margin-top: -2px;
   padding-top: -50px;
-  font-family: "Playfair Display", serif;
-  font-size: 20px;
+ font-family: "Inter", sans-serif;
+  font-size: 25px;
   color: #1f1036;
-  text-shadow: 0 4px 18px rgba(52, 24, 97, 0.25);
 }
 
 /* ===========================
@@ -366,12 +388,12 @@ margin-bottom: 4px;
   border: none;
   background: radial-gradient(
     circle at 30% 0%,
-    #ffe7ff 0%,
-    #f27cff 50%,
-    #8e44ff 100%
+    #f1d3f1 0%,
+    #cd7cee 50%,
+    #7b52da 100%
   );
-  color: #2a103f;
-  font-size: 30px;
+  color: #4d246f;
+  font-size: 40px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -418,6 +440,10 @@ margin-bottom: 4px;
   min-height: 100vh;
 }
 
+.app-new {
+  overflow: hidden;
+}
+
 .form-wrapper,
 .detail-wrapper {
   width: 100%;
@@ -445,10 +471,12 @@ margin-bottom: 4px;
 }
 
 .sub-title {
-  margin: 50px 0 0;
+  margin: 30px 0 0;
+  margin-bottom: -20px;
+  max-width: 100%;
   font-size: 22px;
   color: #1f1036;
-  font-family: "Playfair Display", serif;
+  font-family: "Inter", sans-serif;
 }
 
 /* Make all placeholder text consistent */
@@ -475,13 +503,14 @@ margin-bottom: 4px;
    =========================== */
 
 .field-group {
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 .field-label {
-  font-size: 13px;
+  display: block;   
+  font-size: 16px;
   color: #5b4a8f;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
 }
 
 .field-input,
@@ -490,9 +519,9 @@ margin-bottom: 4px;
   border-radius: 14px;
   border: none;
   padding: 10px 12px;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   background: #f5eaff;
-  font-size: 14px;
+  font-size: 16px;
   color: #3c2f65;
   outline: none;
   box-shadow: inset 0 0 0 1px rgba(152, 122, 255, 0.35);
@@ -516,21 +545,22 @@ margin-bottom: 4px;
 .tag-pill {
   border: none;
   border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 12px;
+  padding: 10px 18px;   /* larger click area */
+  font-size: 12px;      /* bigger text */
   background: #5c4b9e;
   color: #fdf9ff;
   cursor: pointer;
   transition: transform 0.12s ease, background 0.12s ease,
     box-shadow 0.12s ease;
-  box-shadow: 0 5px 14px rgba(43, 11, 91, 0.4);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
 }
+
 
 .tag-pill.selected {
   background: #f7b5ff;
   color: #44285f;
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(42, 6, 80, 0.55);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
 }
 
 .custom-tag-row {
@@ -560,7 +590,7 @@ margin-bottom: 4px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(42, 5, 80, 0.5);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
 }
 
 /* ===========================
@@ -629,17 +659,6 @@ margin-bottom: 4px;
   box-sizing: border-box;
 }
 
-/* .slider-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #6e5ea7;
-}
-
-.slider-row input[type="range"] {
-  flex: 1;
-} */
 
 /* ===========================
    TOGGLE PILL BUTTONS
@@ -648,10 +667,10 @@ margin-bottom: 4px;
 .toggle-row {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  margin: 10px 0 16px;
+  gap: 20px;
+  margin: 10px 0 20px;
+  margin-right: -15px; /* adjust to match your input padding */
 }
-
 .toggle-group {
   flex: 1;
 }
@@ -666,22 +685,88 @@ margin-bottom: 4px;
   display: none;
 }
 
+/* PILL TOGGLES — match tag styles */
+
 .pill-toggle span {
   display: inline-block;
-  padding: 4px 10px;
+  padding: 8px 18px;              /* bigger click target */
   border-radius: 999px;
-  border: 1px solid #c2a8ff;
   font-size: 12px;
   cursor: pointer;
-  color: #5b4a8f;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
+  background: #5c4b9e;            /* SAME as tag default */
+  color: #fdf9ff;                 /* SAME as tag default */
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+  transition: transform 0.12s ease, 
+              background 0.12s ease, 
+              box-shadow 0.12s ease;
 }
 
 .pill-toggle input:checked + span {
-  background: #5c4b9e;
-  color: #fdf9ff;
-  box-shadow: 0 6px 14px rgba(46, 9, 96, 0.7);
+  background: #f7b5ff;            /* SAME as tag selected */
+  color: #44285f;                 /* SAME as tag selected */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+}
+
+
+.pill-toggle span:hover {
+  transform: translateY(-1px) scale(1.04);
+}
+
+
+/* Wrapper */
+.toggle-switch {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Hide checkbox */
+.toggle-switch input {
+  display: none;
+}
+
+/* Track */
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  background: #d6caff; /* muted lavender */
+  border-radius: 999px;
+  transition: background 0.25s ease;
+}
+
+/* Thumb */
+.switch-slider::before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  top: 3px;
+  background: #5c4b9e; /* purple knob */
+  border-radius: 50%;
+  transition: transform 0.25s ease, background 0.25s ease;
+  box-shadow: 0 4px 12px rgba(40, 18, 80, 0.35);
+}
+
+/* ON state */
+.toggle-switch input:checked + .switch-slider {
+  background: #b08cff; 
+}
+
+.toggle-switch input:checked + .switch-slider::before {
+  transform: translateX(24px);
+  background: #3d2a84;
+}
+
+/* Label next to toggle */
+.toggle-label {
+  font-size: 14px;
+  color: #3d2a84;
+  font-weight: 600;
 }
 
 /* ===========================
@@ -693,12 +778,12 @@ margin-bottom: 4px;
   border: none;
   border-radius: 999px;
   padding: 11px 0;
-  background: linear-gradient(135deg, #6a39ff, #f27cff);
+background: linear-gradient(135deg, #7b52da 0%, #df8dff 100%);
   color: #fdf9ff;
   font-size: 15px;
   cursor: pointer;
+  box-shadow: 0 6px 16px rgba(40, 10, 90, 0.25);
   margin-top: 10px;
-  box-shadow: 0 12px 26px rgba(25, 3, 60, 0.85);
   font-weight: 600;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
@@ -721,7 +806,7 @@ margin-bottom: 4px;
   margin: 0 0 4px;
   font-size: 20px;
   color: #3a295f;
-  font-family: "Playfair Display", serif;
+ font-family: "Inter", sans-serif;
 }
 
 .detail-date {
