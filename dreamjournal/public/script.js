@@ -81,8 +81,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (latestContainer) {
     loadDreams();
   }
+   const detailCard = document.getElementById("dreamDetail");
+  if (detailCard) {
+    loadDreamDetail();
+  }
 });
 
+// fetch and render dreams on homepage
 // fetch and render dreams on homepage
 async function loadDreams() {
   try {
@@ -99,9 +104,80 @@ async function loadDreams() {
         <h3>${dream.title}</h3>
         <p>${new Date(dream.createdAt).toLocaleDateString()}</p>
       `;
+
+      // make card clickable – go to detail page
+      card.addEventListener("click", () => {
+        window.location.href = `dream.html?id=${dream._id}`;
+      });
+
       container.appendChild(card);
     });
   } catch (err) {
     console.error("Error loading dreams", err);
   }
 }
+// ---------- DETAIL PAGE HELPERS ----------
+
+function getDreamIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+async function loadDreamDetail() {
+  const id = getDreamIdFromUrl();
+  if (!id) return;
+
+  try {
+    const res = await fetch(`/api/dreams/${id}`);
+    if (!res.ok) {
+      console.error("Failed to fetch dream", res.status);
+      return;
+    }
+
+    const dream = await res.json();
+
+    const titleEl = document.getElementById("detailTitle");
+    const dateEl = document.getElementById("detailDate");
+    const tagsEl = document.getElementById("detailTags");
+    const emotionEl = document.getElementById("detailEmotion");
+    const flagsEl = document.getElementById("detailFlags");
+    const storyEl = document.getElementById("detailStory");
+
+    if (!titleEl) return; // not on detail page
+
+    titleEl.textContent = dream.title;
+    dateEl.textContent = new Date(dream.createdAt).toLocaleDateString();
+
+    // tags
+    tagsEl.innerHTML = "";
+    (dream.tags || []).forEach(tag => {
+      const pill = document.createElement("span");
+      pill.className = "tag-pill selected";
+      pill.textContent = tag;
+      tagsEl.appendChild(pill);
+    });
+
+    // emotion text
+    const level = dream.emotionLevel || 0;
+    const label =
+      level <= 1 ? "Very relaxed" :
+      level === 2 ? "Relaxed" :
+      level === 3 ? "Neutral" :
+      level === 4 ? "Strong" :
+      "Very intense";
+
+    emotionEl.textContent = `${label} (${level}/5)`;
+
+    // type (recurring / nightmare)
+    const bits = [];
+    bits.push(dream.recurring ? "Recurring dream" : "One-time dream");
+    bits.push(dream.nightmare ? "Nightmare" : "Not a nightmare");
+    flagsEl.textContent = bits.join(" • ");
+
+    // story
+    storyEl.textContent = dream.story;
+  } catch (err) {
+    console.error("Error loading dream detail", err);
+  }
+}
+

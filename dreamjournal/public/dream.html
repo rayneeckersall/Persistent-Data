@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Details</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="app app-new">
+
+  <header class="sub-hero">
+    <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
+    <h1 class="sub-title">Dream Details</h1>
+  </header>
+
+  <main class="detail-wrapper">
+    <div class="detail-card" id="dreamDetail">
+      <h2 id="detailTitle" class="detail-title">Loading...</h2>
+      <p id="detailDate" class="detail-date"></p>
+
+      <div class="field-group">
+        <p class="field-label">Tags:</p>
+        <div id="detailTags" class="tags-row"></div>
+      </div>
+
+      <div class="field-group">
+        <p class="field-label">Emotion Level:</p>
+        <p id="detailEmotion" class="detail-chip"></p>
+      </div>
+
+      <div class="field-group">
+        <p class="field-label">Type:</p>
+        <p id="detailFlags" class="detail-chip"></p>
+      </div>
+
+      <div class="field-group">
+        <p class="field-label">Story:</p>
+        <p id="detailStory" class="detail-story"></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

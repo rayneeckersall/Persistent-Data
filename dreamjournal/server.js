@@ -54,6 +54,21 @@ app.get("/api/dreams", async (req, res) => {
   }
 });
 
+// GET a single dream by ID
+app.get("/api/dreams/:id", async (req, res) => {
+  try {
+    const dream = await Dream.findById(req.params.id);
+    if (!dream) {
+      return res.status(404).json({ success: false, message: "Dream not found" });
+    }
+    res.json(dream);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false });
+  }
+});
+
+
 // create new dream
 app.post("/api/dreams", async (req, res) => {
   try {
