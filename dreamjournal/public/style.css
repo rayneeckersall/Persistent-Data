@@ -81,11 +81,10 @@ body.app-new {
   z-index: 3;
   max-width: 420px;
   margin: 0 auto;
-  padding: 0 20px 80px; /* 20px left/right for BOTH hero + entries */
+  padding: 0 20px 0; /* 20px left/right for BOTH hero + entries */
    display: block;
   width: 100%;
   min-height: auto;
-  padding-bottom: 120px; /* keeps entries from hitting the FAB */
 }
 
 
@@ -313,12 +312,12 @@ font-size: 20px;
    =========================== */
 
 .section-title {
-  margin: 6px 0 10px;
+  margin: 20px 0 10px;
   font-size: 16px;
   color: #fef3ff;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  text-shadow: 0 4px 20px rgba(10, 4, 40, 0.7);
+  text-shadow: 0 4px 20px rgba(163, 154, 206, 0.7);
 }
 
 .entries-list {
@@ -326,7 +325,7 @@ font-size: 20px;
   flex-direction: column;
   gap: 22px;   /* was around 12–14px */
   margin-top: 10px;
-  padding-bottom: 140px;
+  padding-bottom: 50px;
 }
 
 
@@ -388,7 +387,7 @@ font-size: 20px;
   border: none;
   background: radial-gradient(
     circle at 30% 0%,
-    #f1d3f1 0%,
+    /* #f1d3f1 0%, */
     #cd7cee 50%,
     #7b52da 100%
   );
@@ -482,8 +481,8 @@ font-size: 20px;
 /* Make all placeholder text consistent */
 ::placeholder {
   font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "SF Pro", "Helvetica Neue", sans-serif;
-  font-size: 12px;
-  color: rgba(60, 47, 101, 0.55); /* same as your textarea placeholder */
+  font-size: 14px;
+  color: rgba(104, 90, 152, 0.55); /* same as your textarea placeholder */
 }
 
 /* Card shell shared by form & detail */
@@ -496,6 +495,11 @@ font-size: 20px;
   box-shadow: 0 18px 35px rgba(26, 4, 60, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(18px);
+}
+
+.app-new .form-card {
+  max-height: calc(100vh - 140px);  /* keeps the card within the screen */
+  overflow-y: auto;                  /* scroll *inside* the card if needed */
 }
 
 /* ===========================
