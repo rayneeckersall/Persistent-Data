@@ -35,7 +35,7 @@ body {
 body {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
     "SF Pro", "Helvetica Neue", sans-serif;
-  background: #0b0326;
+  background: #ffffff;
   color: var(--ink-primary);
 }
 
@@ -52,6 +52,18 @@ body.app-new {
 .app {
   min-height: 100vh;
   color: var(--ink-primary);
+}
+
+.app-home,
+.app-new,
+.app-detail {
+  max-width: 420px;          /* mobile width */
+  margin: 0 auto;            /* center on page */
+  min-height: 100vh;         /* fill viewport */
+  border-radius: 30px;       /* phone-like corners */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.247); /* subtle phone shadow */
+  overflow: hidden;          /* keep clouds/stars inside */
+  position: relative;        /* needed for star layer */
 }
 
 /* ===========================
@@ -90,7 +102,7 @@ body.app-new {
 
 /* optional star layer overlay */
 .star-layer {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 2;
@@ -387,7 +399,6 @@ font-size: 20px;
   border: none;
   background: radial-gradient(
     circle at 30% 0%,
-    /* #f1d3f1 0%, */
     #cd7cee 50%,
     #7b52da 100%
   );
@@ -397,7 +408,7 @@ font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 18px 35px rgba(42, 11, 89, 0.8);
+  box-shadow: 0 10px 35px rgba(64, 23, 126, 0.8);
   cursor: pointer;
   transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
