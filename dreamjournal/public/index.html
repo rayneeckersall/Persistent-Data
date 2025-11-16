@@ -5,76 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dream Journal</title>
 
-  <!-- New fonts -->
+  <!-- Inter font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-  rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
 
-
-  
   <link rel="stylesheet" href="style.css" />
 </head>
 
-<body class="app app-home">
-  <div class="sky-layer">
-    <div class="cloud cloud-1"></div>
-    <div class="cloud cloud-2"></div>
-    <div class="cloud cloud-3"></div>
-    <div class="cloud cloud-4"></div>
-  </div>
+<body class="app">
+  <!-- PHONE FRAME (everything lives inside here) -->
+  <div class="phone-frame app-home">
 
-  <div class="star-layer"></div>
+    <!-- Clouds / sky layer -->
+    <div class="sky-layer">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="cloud cloud-4"></div>
+    </div>
 
-  <main class="home-layout">
-    <header class="hero">
-      <div class="hero-text">
-        <p class="hero-eyebrow">Hi Rayne,</p>
-        <h1 class="hero-title">What Did You Dream About?</h1>
-      </div>
-    </header>
+    <!-- Star overlay -->
+    <div class="star-layer"></div>
 
-<section class="entries-section">
-  <!-- new star cluster -->
-<div class="star-cluster">
-  <!-- row 1 -->
-  <div class="star s1"></div>
-  <div class="star s2"></div>
-  <div class="star s3"></div>
-  <div class="star s4"></div>
+    <!-- Main content -->
+    <main class="home-layout">
+      <header class="hero">
+        <div class="hero-text">
+          <p class="hero-eyebrow">Hi Rayne,</p>
+          <h1 class="hero-title">What Did You Dream About?</h1>
+        </div>
+      </header>
 
-  <!-- row 2 (slightly higher/lower offset) -->
-  <div class="star s5"></div>
-  <div class="star s6"></div>
-  <div class="star s7"></div>
+      <section class="entries-section">
+        <!-- star cluster under “Latest Entries” -->
+        <div class="star-cluster">
+          <!-- row 1 -->
+          <div class="star s1"></div>
+          <div class="star s2"></div>
+          <div class="star s3"></div>
+          <div class="star s4"></div>
 
-  <!-- row 3 (very subtle, scattered) -->
-  <div class="star s8"></div>
-  <div class="star s9"></div>
-  <div class="star s10"></div>
-<div class="star s11"></div>
-<div class="star s12"></div>
-<div class="star s13"></div>
-<div class="star s14"></div>
-<div class="star s15"></div>
-<div class="star s16"></div>
-<div class="star s17"></div>
-<div class="star s18"></div>
-<div class="star s19"></div>
+          <!-- row 2 -->
+          <div class="star s5"></div>
+          <div class="star s6"></div>
+          <div class="star s7"></div>
 
-</div>
+          <!-- row 3 / extras -->
+          <div class="star s8"></div>
+          <div class="star s9"></div>
+          <div class="star s10"></div>
+          <div class="star s11"></div>
+          <div class="star s12"></div>
+          <div class="star s13"></div>
+          <div class="star s14"></div>
+          <div class="star s15"></div>
+          <div class="star s16"></div>
+          <div class="star s17"></div>
+          <div class="star s18"></div>
+          <div class="star s19"></div>
+        </div>
 
+        <h2 class="section-title">Latest Entries</h2>
 
-  <h2 class="section-title">Latest Entries</h2>
+        <div id="latestEntries" class="entries-list"></div>
+      </section>
+    </main>
 
-  <div id="latestEntries" class="entries-list"></div>
-</section>
+    <!-- FAB lives inside the phone frame -->
+    <button id="addDreamBtn" class="fab" type="button">+</button>
 
-  </main>
-
- <button id="addDreamBtn" class="fab" type="button">+</button>
-
+  </div><!-- /.phone-frame -->
 
   <script src="script.js"></script>
 </body>

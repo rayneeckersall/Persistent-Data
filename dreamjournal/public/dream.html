@@ -5,73 +5,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dream Details</title>
   
-  <!-- New fonts -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-  rel="stylesheet"
-/>
-
-
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
 
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="app app-new">
+<body class="app">
+  <!-- PHONE FRAME -->
+  <div class="phone-frame app-detail">
 
-  <header class="sub-hero">
-    <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
-    <h1 class="sub-title">Dream Details</h1>
-  </header>
+    <header class="sub-hero">
+      <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
+      <h1 class="sub-title">Dream Details</h1>
+    </header>
 
-  <main class="detail-wrapper">
-    <div class="detail-card" id="dreamDetail">
-      <h2 id="detailTitle" class="detail-title">Loading...</h2>
-      <p id="detailDate" class="detail-date"></p>
+    <main class="detail-wrapper">
+      <div class="detail-card" id="dreamDetail">
+        <h2 id="detailTitle" class="detail-title">Loading...</h2>
+        <p id="detailDate" class="detail-date"></p>
 
-      <div class="field-group">
-        <p class="field-label">Story:</p>
-        <p id="detailStory" class="detail-story"></p>
+        <div class="field-group">
+          <p class="field-label">Story:</p>
+          <p id="detailStory" class="detail-story"></p>
+        </div>
+
+        <div class="field-group">
+          <p class="field-label">Tags:</p>
+          <div id="detailTags" class="tags-row"></div>
+        </div>
+
+        <div class="field-group">
+          <p class="field-label">Emotion Level:</p>
+          <p id="detailEmotion" class="detail-chip"></p>
+        </div>
+
+        <div class="field-group">
+          <p class="field-label">Type:</p>
+          <p id="detailFlags" class="detail-chip"></p>
+        </div>
+        
+        <div class="field-group">
+          <button id="deleteDreamBtn" class="danger-btn">Delete Dream</button>
+        </div>
       </div>
-      <div class="field-group">
-        <p class="field-label">Tags:</p>
-        <div id="detailTags" class="tags-row"></div>
-      </div>
+    </main>
 
-      <div class="field-group">
-        <p class="field-label">Emotion Level:</p>
-        <p id="detailEmotion" class="detail-chip"></p>
-      </div>
+    <!-- Delete confirmation modal (inside phone frame) -->
+    <div class="confirm-modal hidden" id="confirmModal">
+      <div class="confirm-card">
+        <h2 class="confirm-title">Delete this dream?</h2>
+        <p class="confirm-text">
+          This action can’t be undone. Are you sure you want to delete this dream?
+        </p>
 
-      <div class="field-group">
-        <p class="field-label">Type:</p>
-        <p id="detailFlags" class="detail-chip"></p>
+        <div class="confirm-actions">
+          <button type="button" class="confirm-cancel-btn" id="cancelDeleteBtn">
+            Cancel
+          </button>
+          <button type="button" class="danger-btn" id="confirmDeleteBtn">
+            Delete
+          </button>
+        </div>
       </div>
-      
-            <div class="field-group">
-        <button id="deleteDreamBtn" class="danger-btn">Delete Dream</button>
-      </div>
-
     </div>
-  </main>
-<!-- Delete confirmation modal -->
-<div class="confirm-modal hidden" id="confirmModal">
-  <div class="confirm-card">
-    <h2 class="confirm-title">Delete this dream?</h2>
-    <p class="confirm-text">
-      This action can’t be undone. Are you sure you want to delete this dream?
-    </p>
 
-    <div class="confirm-actions">
-      <button type="button" class="confirm-cancel-btn" id="cancelDeleteBtn">
-        Cancel
-      </button>
-      <button type="button" class="danger-btn" id="confirmDeleteBtn">
-        Delete
-      </button>
-    </div>
-  </div>
-</div>
+  </div> <!-- /.phone-frame -->
 
   <script src="script.js"></script>
 </body>

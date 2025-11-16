@@ -25,7 +25,7 @@
   box-sizing: border-box;
 }
 
-html,
+/* html,
 body {
   margin: 0;
   padding: 0;
@@ -36,7 +36,6 @@ body {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
     "SF Pro", "Helvetica Neue", sans-serif;
   background: #ffffff;
-  color: var(--ink-primary);
 }
 
 body.app-home {
@@ -45,26 +44,76 @@ body.app-home {
 
 body.app-new {
   overflow: hidden;
-  height: 100vh;  /* make it exactly viewport height */
+  height: 100vh; 
+} */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-/* Root wrapper used everywhere */
+body {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "SF Pro", "Helvetica Neue", sans-serif;
+  background: #ffffff;             /* white outside the phone */
+  color: var(--ink-primary);
+  display: flex;
+  justify-content: center;         /* center the phone on large screens */
+}
+
 .app {
   min-height: 100vh;
-  color: var(--ink-primary);
+  width: 100%;
 }
 
-.app-home,
-.app-new,
-.app-detail {
-  max-width: 420px;          /* mobile width */
-  margin: 0 auto;            /* center on page */
-  min-height: 100vh;         /* fill viewport */
-  border-radius: 30px;       /* phone-like corners */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.247); /* subtle phone shadow */
-  overflow: hidden;          /* keep clouds/stars inside */
-  position: relative;        /* needed for star layer */
+/* PHONE FRAME WRAPPER */
+.phone-frame {
+  position: relative;
+  width: 100%;
+  max-width: 420px;                /* mobile width */
+  min-height: 100vh;
+  margin: 0 auto;
+  border-radius: 30px;             /* phone-like corners */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.24);
+  overflow: hidden;                /* keep clouds/stars inside */
 }
+
+/* HOME: DAY → NIGHT BACKGROUND */
+.phone-frame.app-home {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--bg-day-top) 0%,
+    var(--bg-day-mid) 30%,
+    var(--bg-night-mid) 65%,
+    var(--bg-night-bottom) 100%
+  );
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-y: auto;
+  background-size: 100% calc(100% + 240px);
+  background-position-y: calc(-80px * var(--scroll-progress));
+}
+
+.phone-frame.app-new,
+.phone-frame.app-detail {
+  background: linear-gradient(
+    180deg,
+    #efe4ff 0%,
+    #c4a7ff 40%,
+    #8d6ad8 75%,
+    #3a2a7a 100%
+  );
+  min-height: 100vh;
+}
+
+.phone-frame.app-new {
+  overflow: hidden; /* card itself will scroll */
+}
+
 
 /* ===========================
    HOME: DAY → NIGHT BACKGROUND
