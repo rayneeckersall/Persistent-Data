@@ -378,7 +378,7 @@ font-size: 20px;
   color: #fef3ff;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  text-shadow: 0 4px 20px rgba(163, 154, 206, 0.7);
+  text-shadow: 0 2px 10px rgba(92, 83, 139, 0.7);
 }
 
 .entries-list {
@@ -402,7 +402,7 @@ font-size: 20px;
   );
   border-radius: 22px;
   padding: 18px 20px;
-  box-shadow: 0 18px 35px rgba(28, 7, 71, 0.5);
+  box-shadow: 0 10px 20px rgba(108, 86, 153, 0.5);
   backdrop-filter: blur(18px);
   display: flex;
   flex-direction: column;
@@ -415,7 +415,6 @@ font-size: 20px;
 
 .dream-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 24px 40px rgba(20, 4, 60, 0.7);
   background: linear-gradient(135deg, #fff4ff, #f4ddff);
 }
 
@@ -436,7 +435,7 @@ font-size: 20px;
    =========================== */
 
 .fab {
-  position: fixed;
+  position: absolute;
   z-index: 4;
   bottom: 26px;
   left: 50%;
@@ -917,7 +916,7 @@ background: linear-gradient(135deg, #7b52da 0%, #df8dff 100%);
    =========================== */
 
 .confirm-modal {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: rgba(8, 4, 30, 0.55);
   display: flex;

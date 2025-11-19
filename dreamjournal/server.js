@@ -10,7 +10,12 @@ const app = express();
 // ----- MIDDLEWARE -----
 app.use(cors());
 app.use(express.json());
+
+// If your HTML/CSS/JS are in a "public" folder, keep this:
 app.use(express.static(path.join(__dirname, "public")));
+
+// If they are in the same folder as server.js instead, use this instead:
+// app.use(express.static(__dirname));
 
 // ----- DATABASE CONNECTION -----
 mongoose
@@ -38,12 +43,12 @@ const Dream = mongoose.model("Dream", dreamSchema);
 
 // ----- ROUTES -----
 
-// quick test route
+// health check
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-// get all dreams (newest first)
+// GET all dreams (newest first)
 app.get("/api/dreams", async (req, res) => {
   try {
     const dreams = await Dream.find().sort({ createdAt: -1 });
@@ -54,7 +59,7 @@ app.get("/api/dreams", async (req, res) => {
   }
 });
 
-// GET a single dream by ID
+// GET one dream by ID
 app.get("/api/dreams/:id", async (req, res) => {
   try {
     const dream = await Dream.findById(req.params.id);
@@ -62,33 +67,24 @@ app.get("/api/dreams/:id", async (req, res) => {
       return res.status(404).json({ success: false, message: "Dream not found" });
     }
     res.json(dream);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false });
-  }
-});
-
-// DELETE a dream by ID
-app.delete("/api/dreams/:id", async (req, res) => {
-  try {
-    const deleted = await Dream.findByIdAndDelete(req.params.id);
-
-    if (!deleted) {
-      return res.status(404).json({ success: false, message: "Dream not found" });
-    }
-
-    res.json({ success: true });
   } catch (err) {
-    console.error("Error deleting dream:", err);
-    res.status(500).json({ success: false, message: "Failed to delete dream" });
+    console.error("Error fetching dream:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch dream" });
   }
 });
 
-
-// create new dream
+// CREATE a new dream
 app.post("/api/dreams", async (req, res) => {
   try {
-    const dream = await Dream.create(req.body);
+    const dream = await Dream.create({
+      title: req.body.title,
+      story: req.body.story,
+      tags: req.body.tags || [],
+      emotionLevel: req.body.emotionLevel ?? 3,
+      recurring: !!req.body.recurring,
+      nightmare: !!req.body.nightmare
+    });
+
     res.status(201).json(dream);
   } catch (err) {
     console.error("Error creating dream:", err);
@@ -96,11 +92,13 @@ app.post("/api/dreams", async (req, res) => {
   }
 });
 
-// toggle favorite
+// TOGGLE favorite
 app.patch("/api/dreams/:id/favorite", async (req, res) => {
   try {
     const dream = await Dream.findById(req.params.id);
-    if (!dream) return res.status(404).json({ error: "Dream not found" });
+    if (!dream) {
+      return res.status(404).json({ error: "Dream not found" });
+    }
 
     dream.favorite = !dream.favorite;
     await dream.save();
@@ -111,14 +109,17 @@ app.patch("/api/dreams/:id/favorite", async (req, res) => {
   }
 });
 
-// optional: delete dream
+// DELETE a dream
 app.delete("/api/dreams/:id", async (req, res) => {
   try {
-    await Dream.findByIdAndDelete(req.params.id);
-    res.status(204).end();
+    const deleted = await Dream.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: "Dream not found" });
+    }
+    res.json({ success: true });
   } catch (err) {
     console.error("Error deleting dream:", err);
-    res.status(400).json({ error: "Failed to delete dream" });
+    res.status(500).json({ success: false, message: "Failed to delete dream" });
   }
 });
 
@@ -126,38 +127,5 @@ app.delete("/api/dreams/:id", async (req, res) => {
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
-
-// CREATE a new dream entry
-app.post('/api/dreams', async (req, res) => {
-    try {
-        const dream = new Dream({
-            title: req.body.title,
-            story: req.body.story,
-            tags: req.body.tags,
-            emotionLevel: req.body.emotionLevel,
-            recurring: req.body.recurring,
-            nightmare: req.body.nightmare,
-            createdAt: new Date()
-        });
-
-        await dream.save();
-        res.json({ success: true, dream });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false });
-    }
-});
-
-// GET all dreams
-app.get('/api/dreams', async (req, res) => {
-    try {
-        const dreams = await Dream.find().sort({ createdAt: -1 });
-        res.json(dreams);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false });
-    }
-});
-
