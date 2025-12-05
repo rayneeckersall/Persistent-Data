@@ -1,36 +1,44 @@
-// Run after DOM is ready
+// ---------- HELPERS ----------
+function getDreamIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+// For tag buttons (new + existing)
+function wireTagButton(btn) {
+  btn.addEventListener("click", () => {
+    btn.classList.toggle("selected");
+  });
+}
+
+// ---------- MAIN DOM LOADED ----------
 document.addEventListener("DOMContentLoaded", () => {
   const submitBtn = document.getElementById("submitBtn");
   const latestContainer = document.getElementById("latestEntries");
-  const tagButtons = document.querySelectorAll(".tag-pill");
   const addCustomTagBtn = document.getElementById("addCustomTag");
   const addBtn = document.getElementById("addDreamBtn");
   const detailCard = document.getElementById("dreamDetail");
   const deleteBtn = document.getElementById("deleteDreamBtn");
+  const editBtn = document.getElementById("editDreamBtn");
 
-  // NEW: in-app delete confirmation modal elements
   const confirmModal = document.getElementById("confirmModal");
-  const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
   const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+  const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+  // Wire up any existing tag pills (on new.html)
+  document.querySelectorAll(".tags-row .tag-pill").forEach(wireTagButton);
+
+  // Current dream ID from URL, if any
+  const editingId = getDreamIdFromUrl();
 
   // ----- HOME PAGE: + button -----
   if (addBtn) {
     addBtn.addEventListener("click", () => {
-      // go to the Add Dream page
       window.location.href = "new.html";
     });
   }
 
   // ----- ADD DREAM PAGE: tag toggles -----
-  if (tagButtons.length > 0) {
-    tagButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        btn.classList.toggle("selected");
-      });
-    });
-  }
-
-  // custom tag (+)
   if (addCustomTagBtn) {
     addCustomTagBtn.addEventListener("click", () => {
       const input = document.getElementById("customTag");
@@ -41,17 +49,24 @@ document.addEventListener("DOMContentLoaded", () => {
       newTag.type = "button";
       newTag.className = "tag-pill selected";
       newTag.textContent = value;
-      newTag.addEventListener("click", () => {
-        newTag.classList.toggle("selected");
-      });
+      wireTagButton(newTag);
 
-      document.querySelector(".tags-row").appendChild(newTag);
+      const tagsRow = document.querySelector(".tags-row");
+      if (tagsRow) {
+        tagsRow.appendChild(newTag);
+      }
       input.value = "";
     });
   }
 
-  // ----- ADD DREAM PAGE: submit -----
+  // ----- ADD / EDIT DREAM PAGE: pre-fill if editing -----
   if (submitBtn) {
+    if (editingId) {
+      // We are on new.html?id=... → EDIT MODE
+      populateFormForEdit(editingId);
+      submitBtn.textContent = "Save Changes";
+    }
+
     submitBtn.addEventListener("click", async () => {
       const title = document.getElementById("title").value.trim();
       const story = document.getElementById("story").value.trim();
@@ -63,27 +78,33 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const tags = [...document.querySelectorAll(".tag-pill.selected")].map(
-        tag => tag.innerText
+        (tag) => tag.innerText
       );
 
-      // pill true/false radios
-      const recurringInput = document.querySelector("input[name='recurring']:checked");
-      const nightmareInput = document.querySelector("input[name='nightmare']:checked");
+      const recurringInput = document.querySelector(
+        "input[name='recurring']:checked"
+      );
+      const nightmareInput = document.querySelector(
+        "input[name='nightmare']:checked"
+      );
 
       const recurring = recurringInput ? recurringInput.value === "true" : false;
       const nightmare = nightmareInput ? nightmareInput.value === "true" : false;
 
       const dream = { title, story, tags, emotionLevel, recurring, nightmare };
 
+      // NEW: choose POST vs PUT based on edit mode
+      const url = editingId ? `/api/dreams/${editingId}` : "/api/dreams";
+      const method = editingId ? "PUT" : "POST";
+
       try {
-        const res = await fetch("/api/dreams", {
-          method: "POST",
+        const res = await fetch(url, {
+          method,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dream)
+          body: JSON.stringify(dream),
         });
 
         if (res.ok) {
-          // back home after saving
           window.location.href = "index.html";
         } else {
           alert("Error saving dream.");
@@ -100,27 +121,52 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDreams();
   }
 
-  // ----- DETAIL PAGE: load -----
+  // ----- DETAIL PAGE: load + edit + delete (with modal) -----
   if (detailCard) {
     loadDreamDetail();
   }
 
-  // ----- DETAIL PAGE: delete with in-app modal -----
-  if (deleteBtn && confirmModal && confirmDeleteBtn && cancelDeleteBtn) {
-    // open modal
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      const id = getDreamIdFromUrl();
+      if (!id) return;
+      window.location.href = `new.html?id=${id}`;
+    });
+  }
+
+  if (deleteBtn && confirmModal && cancelDeleteBtn && confirmDeleteBtn) {
+    let deleteId = getDreamIdFromUrl();
+
     deleteBtn.addEventListener("click", () => {
+      deleteId = getDreamIdFromUrl();
+      if (!deleteId) return;
       confirmModal.classList.remove("hidden");
     });
 
-    // cancel → close modal
     cancelDeleteBtn.addEventListener("click", () => {
       confirmModal.classList.add("hidden");
     });
 
-    // confirm → actually delete
-    confirmDeleteBtn.addEventListener("click", () => {
-      confirmModal.classList.add("hidden");
-      deleteCurrentDream();
+    confirmDeleteBtn.addEventListener("click", async () => {
+      if (!deleteId) return;
+
+      try {
+        const res = await fetch(`/api/dreams/${deleteId}`, {
+          method: "DELETE",
+        });
+
+        if (!res.ok) {
+          console.error("Failed to delete dream", res.status);
+          alert("Error deleting dream.");
+          return;
+        }
+
+        confirmModal.classList.add("hidden");
+        window.location.href = "index.html";
+      } catch (err) {
+        console.error("Error deleting dream", err);
+        alert("Error deleting dream.");
+      }
     });
   }
 });
@@ -136,7 +182,7 @@ async function loadDreams() {
 
     container.innerHTML = "";
 
-    dreams.forEach(dream => {
+    dreams.forEach((dream) => {
       const card = document.createElement("div");
       card.className = "dream-card";
       card.innerHTML = `
@@ -144,7 +190,6 @@ async function loadDreams() {
         <p>${new Date(dream.createdAt).toLocaleDateString()}</p>
       `;
 
-      // click card → detail page
       card.addEventListener("click", () => {
         window.location.href = `dream.html?id=${dream._id}`;
       });
@@ -156,12 +201,7 @@ async function loadDreams() {
   }
 }
 
-// ---------- DETAIL PAGE HELPERS ----------
-function getDreamIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
-}
-
+// ---------- DETAIL PAGE: load dream data ----------
 async function loadDreamDetail() {
   const id = getDreamIdFromUrl();
   if (!id) return;
@@ -182,16 +222,16 @@ async function loadDreamDetail() {
     const flagsEl = document.getElementById("detailFlags");
     const storyEl = document.getElementById("detailStory");
 
-    if (!titleEl) return; // not on detail page
+    if (!titleEl) return;
 
     titleEl.textContent = dream.title;
     dateEl.textContent = new Date(dream.createdAt).toLocaleDateString();
 
     // tags
     tagsEl.innerHTML = "";
-    (dream.tags || []).forEach(tag => {
+    (dream.tags || []).forEach((tag) => {
       const pill = document.createElement("span");
-      pill.className = "tag-pill selected";
+      pill.className = "detail-chip";
       pill.textContent = tag;
       tagsEl.appendChild(pill);
     });
@@ -199,11 +239,15 @@ async function loadDreamDetail() {
     // emotion
     const level = dream.emotionLevel || 0;
     const label =
-      level <= 1 ? "Very relaxed" :
-      level === 2 ? "Relaxed" :
-      level === 3 ? "Neutral" :
-      level === 4 ? "Strong" :
-      "Very intense";
+      level <= 1
+        ? "Very relaxed"
+        : level === 2
+        ? "Relaxed"
+        : level === 3
+        ? "Neutral"
+        : level === 4
+        ? "Strong"
+        : "Very intense";
 
     emotionEl.textContent = `${label} (${level}/5)`;
 
@@ -213,32 +257,80 @@ async function loadDreamDetail() {
     bits.push(dream.nightmare ? "Nightmare" : "Not a nightmare");
     flagsEl.textContent = bits.join(" • ");
 
-    // story
     storyEl.textContent = dream.story;
   } catch (err) {
     console.error("Error loading dream detail", err);
   }
 }
 
-async function deleteCurrentDream() {
-  const id = getDreamIdFromUrl();
-  if (!id) return;
-
+// ---------- EDIT MODE: pre-fill new.html form ----------
+async function populateFormForEdit(id) {
   try {
-    const res = await fetch(`/api/dreams/${id}`, {
-      method: "DELETE"
-    });
-
+    const res = await fetch(`/api/dreams/${id}`);
     if (!res.ok) {
-      console.error("Failed to delete dream", res.status);
-      alert("Error deleting dream.");
+      console.error("Failed to fetch dream for editing", res.status);
       return;
     }
 
-    window.location.href = "index.html";
+    const dream = await res.json();
+
+    // Basic fields
+    const titleInput = document.getElementById("title");
+    const storyInput = document.getElementById("story");
+    const emotionInput = document.getElementById("emotion");
+
+    if (titleInput) titleInput.value = dream.title || "";
+    if (storyInput) storyInput.value = dream.story || "";
+    if (emotionInput && dream.emotionLevel) {
+      emotionInput.value = dream.emotionLevel;
+    }
+
+    // Tags
+    const allTags = dream.tags || [];
+    const tagsRow = document.querySelector(".tags-row");
+
+    if (tagsRow) {
+      // First, clear "selected" class from existing tag pills
+      tagsRow.querySelectorAll(".tag-pill").forEach((btn) => {
+        btn.classList.remove("selected");
+      });
+
+      // Mark any default tags that match
+      tagsRow.querySelectorAll(".tag-pill").forEach((btn) => {
+        if (allTags.includes(btn.textContent.trim())) {
+          btn.classList.add("selected");
+        }
+      });
+
+      // Add extra tags that don't already exist as buttons
+      const defaultTagTexts = [...tagsRow.querySelectorAll(".tag-pill")].map(
+        (b) => b.textContent.trim()
+      );
+
+      allTags.forEach((tag) => {
+        if (!defaultTagTexts.includes(tag)) {
+          const newTag = document.createElement("button");
+          newTag.type = "button";
+          newTag.className = "tag-pill selected";
+          newTag.textContent = tag;
+          wireTagButton(newTag);
+          tagsRow.appendChild(newTag);
+        }
+      });
+    }
+
+    // Recurring / Nightmare radios
+    const recurringRadios = document.querySelectorAll("input[name='recurring']");
+    recurringRadios.forEach((r) => {
+      r.checked = dream.recurring ? r.value === "true" : r.value === "false";
+    });
+
+    const nightmareRadios = document.querySelectorAll("input[name='nightmare']");
+    nightmareRadios.forEach((r) => {
+      r.checked = dream.nightmare ? r.value === "true" : r.value === "false";
+    });
   } catch (err) {
-    console.error("Error deleting dream", err);
-    alert("Error deleting dream.");
+    console.error("Error populating form for edit", err);
   }
 }
 

@@ -123,8 +123,38 @@ app.delete("/api/dreams/:id", async (req, res) => {
   }
 });
 
+
+
 // ----- START SERVER -----
 const PORT = process.env.PORT || 4000;
+
+// UPDATE an existing dream
+app.put("/api/dreams/:id", async (req, res) => {
+  try {
+    const updated = await Dream.findByIdAndUpdate(
+      req.params.id,
+      {
+        title: req.body.title,
+        story: req.body.story,
+        tags: req.body.tags,
+        emotionLevel: req.body.emotionLevel,
+        recurring: req.body.recurring,
+        nightmare: req.body.nightmare
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: "Dream not found" });
+    }
+
+    res.json(updated);
+  } catch (err) {
+    console.error("Error updating dream:", err);
+    res.status(500).json({ error: "Failed to update dream" });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
