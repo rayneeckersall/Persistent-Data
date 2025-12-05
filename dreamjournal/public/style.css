@@ -846,11 +846,6 @@ background: linear-gradient(135deg, #7b52da 0%, #df8dff 100%);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.primary-btn:hover {
-  transform: translateY(-1px);
-  background: #7b52da;
-}
-
 .primary-btn:active {
   transform: translateY(1px);
   box-shadow: 0 9px 20px rgba(20, 2, 50, 0.8);
@@ -859,6 +854,7 @@ background: linear-gradient(135deg, #7b52da 0%, #df8dff 100%);
 /* ===========================
    DETAIL PAGE
    =========================== */
+  
 
 .detail-title {
   margin: 0 0 4px;
